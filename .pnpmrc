@@ -1,0 +1,8 @@
+# Разрешаем выполнение build скриптов для необходимых пакетов
+enable-pre-post-scripts=true
+
+# Автоматически устанавливать peer dependencies
+auto-install-peers=true
+
+# Разрешенные build скрипты
+unsafe-perm=true 
