@@ -79,6 +79,8 @@ export function ApplicationLayout({
   let pathname = usePathname()
 
   return (
+    <html>
+      <body>
     <SidebarLayout
       navbar={
         <Navbar>
@@ -190,5 +192,7 @@ export function ApplicationLayout({
     >
       {children}
     </SidebarLayout>
+    </body>
+    </html>
   )
 }

@@ -80,6 +80,7 @@
 2. [Руководство по базе данных](database-guide.md)
 3. [Руководство по API](api-guide.md)
 4. [Руководство по авторизации](authentication-guide.md)
+5. [Руководство по развертыванию](deployment-guide.md)
 
 ### Для продвинутых:
 1. [Руководство по Drizzle ORM](drizzle-orm-guide.md)
