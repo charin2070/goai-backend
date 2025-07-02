@@ -1,0 +1,5 @@
+---
+description: Actively use and maintain the README.md file as the primary source of project context throughout the entire development session. This rule ensures that the AI assistant consistently references the comprehensive project documentation and keeps it updated with any changes made during development.
+globs: ["README.md", "**/README.md"]
+alwaysApply: true
+---

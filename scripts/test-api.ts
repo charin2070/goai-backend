@@ -119,10 +119,10 @@ async function checkServerAndRunTests() {
     if (healthCheck.ok) {
       await testAPI();
     } else {
-      console.log('❌ Сервер не отвечает. Убедитесь, что запущен npm run dev');
+      console.log('❌ Сервер не отвечает. Убедитесь, что запущен pnpm dev');
     }
   } catch (error) {
-    console.log('❌ Сервер не запущен. Запустите npm run dev в другом терминале');
+    console.log('❌ Сервер не запущен. Запустите pnpm dev в другом терминале');
   }
 }
 

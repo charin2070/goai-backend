@@ -1,22 +1,8 @@
-import './globals.css';
+import { getEvents } from 'data'
+import { ApplicationLayout } from './application-layout'
 
-import { Analytics } from '@vercel/analytics/react';
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  let events = await getEvents()
 
-export const metadata = {
-  title: 'Next.js App Router + NextAuth + Tailwind CSS',
-  description:
-    'A user admin dashboard configured with Next.js, Postgres, NextAuth, Tailwind CSS, TypeScript, and Prettier.'
-};
-
-export default function RootLayout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="flex min-h-screen w-full flex-col">{children}</body>
-      {process.env.NODE_ENV === 'production' && <Analytics />}
-    </html>
-  );
+  return <ApplicationLayout events={events}>{children}</ApplicationLayout>
 }

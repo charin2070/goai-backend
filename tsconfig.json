@@ -16,8 +16,10 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/components/*": ["components/*"],
-      "@/lib/*": ["lib/*"]
+      "@/data": ["data.ts"],
+      "@/components/*": ["src/components/*"],
+      "@/lib/*": ["lib/*"],
+      "@/app/*": ["app/*"]
     },
     "plugins": [
       {
@@ -25,6 +27,6 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/layout1tsx"],
   "exclude": ["node_modules", "scripts"]
 }
