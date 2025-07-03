@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoAI-Backend - Project Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .progress-bar {
+            transition: width 0.6s ease;
+        }
+        .milestone-card {
+            transition: all 0.3s ease;
+        }
+        .milestone-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-gray-900">GoAI-Backend Dashboard</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-500" id="last-updated"></span>
+                    <button onclick="refreshData()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-sync-alt mr-2"></i>Обновить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Project Overview Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="metric-card text-white p-6 rounded-xl">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium opacity-90">Общий прогресс</p>
+                        <p class="text-2xl font-bold" id="overall-progress">0%</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-tasks text-2xl text-green-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Активные задачи</p>
+                        <p class="text-2xl font-bold text-gray-900" id="active-tasks">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-calendar-alt text-2xl text-orange-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Дней до завершения</p>
+                        <p class="text-2xl font-bold text-gray-900" id="days-remaining">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-flag-checkered text-2xl text-purple-600"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Milestone'ы</p>
+                        <p class="text-2xl font-bold text-gray-900" id="milestones-count">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Chart -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Прогресс по Milestone'ам</h2>
+            <div class="h-64">
+                <canvas id="progressChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Milestones Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div id="milestones-container" class="space-y-4">
+                <!-- Milestone cards will be inserted here -->
+            </div>
+            
+            <!-- Next Actions & Risks -->
+            <div class="space-y-6">
+                <!-- Next Actions -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-arrow-right text-blue-600 mr-2"></i>Следующие действия
+                    </h3>
+                    <ul id="next-actions-list" class="space-y-2">
+                        <!-- Actions will be inserted here -->
+                    </ul>
+                </div>
+
+                <!-- Risks -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-exclamation-triangle text-red-600 mr-2"></i>Риски проекта
+                    </h3>
+                    <div id="risks-container" class="space-y-3">
+                        <!-- Risks will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Tasks -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Детальное планирование задач</h2>
+            <div id="tasks-detailed" class="space-y-4">
+                <!-- Detailed tasks will be inserted here -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let projectData = {};
+
+        // Load project data
+        async function loadProjectData() {
+            try {
+                const response = await fetch('./project-roadmap.json');
+                projectData = await response.json();
+                updateDashboard();
+            } catch (error) {
+                console.error('Error loading project data:', error);
+                // Fallback data for demo
+                projectData = {
+                    project: { overallProgress: 35 },
+                    milestones: [],
+                    metrics: { days_remaining: 82 },
+                    next_actions: [],
+                    risks: []
+                };
+                updateDashboard();
+            }
+        }
+
+        function updateDashboard() {
+            // Update metrics
+            document.getElementById('overall-progress').textContent = projectData.project.overallProgress + '%';
+            document.getElementById('days-remaining').textContent = projectData.metrics.days_remaining || 0;
+            document.getElementById('milestones-count').textContent = projectData.milestones.length;
+            
+            // Count active tasks
+            let activeTasks = 0;
+            projectData.milestones.forEach(milestone => {
+                milestone.tasks.forEach(task => {
+                    if (task.status === 'in_progress' || task.status === 'pending') activeTasks++;
+                });
+            });
+            document.getElementById('active-tasks').textContent = activeTasks;
+
+            // Update last updated time
+            document.getElementById('last-updated').textContent = 'Обновлено: ' + new Date().toLocaleString('ru');
+
+            // Render milestones
+            renderMilestones();
+            
+            // Render next actions
+            renderNextActions();
+            
+            // Render risks
+            renderRisks();
+            
+            // Render progress chart
+            renderProgressChart();
+            
+            // Render detailed tasks
+            renderDetailedTasks();
+        }
+
+        function renderMilestones() {
+            const container = document.getElementById('milestones-container');
+            container.innerHTML = '';
+            
+            projectData.milestones.forEach(milestone => {
+                const statusColor = getStatusColor(milestone.status);
+                const priorityColor = getPriorityColor(milestone.priority);
+                
+                const milestoneCard = document.createElement('div');
+                milestoneCard.className = 'milestone-card bg-white p-6 rounded-xl shadow-sm border border-gray-200 fade-in';
+                milestoneCard.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">${milestone.name}</h3>
+                        <div class="flex space-x-2">
+                            <span class="status-badge ${statusColor}">${milestone.status}</span>
+                            <span class="status-badge ${priorityColor}">${milestone.priority}</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-4">${milestone.description}</p>
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm text-gray-600 mb-1">
+                            <span>Прогресс</span>
+                            <span>${milestone.progress}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: ${milestone.progress}%"></div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        ${milestone.tasks.length} задач, ${milestone.blockers ? milestone.blockers.length : 0} блокеров
+                    </div>
+                `;
+                container.appendChild(milestoneCard);
+            });
+        }
+
+        function renderNextActions() {
+            const container = document.getElementById('next-actions-list');
+            container.innerHTML = '';
+            
+            (projectData.next_actions || []).forEach(action => {
+                const actionItem = document.createElement('li');
+                actionItem.className = 'flex items-center text-gray-700';
+                actionItem.innerHTML = `
+                    <i class="fas fa-arrow-right text-blue-500 mr-2 text-sm"></i>
+                    <span>${action}</span>
+                `;
+                container.appendChild(actionItem);
+            });
+        }
+
+        function renderRisks() {
+            const container = document.getElementById('risks-container');
+            container.innerHTML = '';
+            
+            (projectData.risks || []).forEach(risk => {
+                const riskColor = getRiskColor(risk.impact);
+                const riskCard = document.createElement('div');
+                riskCard.className = `p-3 rounded-lg border-l-4 ${riskColor} bg-gray-50`;
+                riskCard.innerHTML = `
+                    <div class="flex justify-between items-start mb-1">
+                        <h4 class="font-medium text-gray-900">${risk.description}</h4>
+                        <span class="text-xs text-gray-500">${risk.probability}/${risk.impact}</span>
+                    </div>
+                    <p class="text-sm text-gray-600">${risk.mitigation}</p>
+                `;
+                container.appendChild(riskCard);
+            });
+        }
+
+        function renderProgressChart() {
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            
+            const labels = projectData.milestones.map(m => m.name);
+            const progress = projectData.milestones.map(m => m.progress);
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Прогресс (%)',
+                        data: progress,
+                        backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderDetailedTasks() {
+            const container = document.getElementById('tasks-detailed');
+            container.innerHTML = '';
+            
+            projectData.milestones.forEach(milestone => {
+                const milestoneSection = document.createElement('div');
+                milestoneSection.className = 'border border-gray-200 rounded-lg p-4';
+                milestoneSection.innerHTML = `
+                    <h3 class="font-semibold text-gray-900 mb-3">${milestone.name}</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${milestone.tasks.map(task => `
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <i class="fas ${getTaskIcon(task.status)} mr-2 ${getTaskIconColor(task.status)}"></i>
+                                    <span class="text-sm font-medium">${task.name}</span>
+                                </div>
+                                <span class="text-xs text-gray-500">${task.progress}%</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(milestoneSection);
+            });
+        }
+
+        // Utility functions
+        function getStatusColor(status) {
+            const colors = {
+                'completed': 'bg-green-100 text-green-800',
+                'in_progress': 'bg-blue-100 text-blue-800',
+                'planned': 'bg-gray-100 text-gray-800',
+                'pending': 'bg-yellow-100 text-yellow-800'
+            };
+            return colors[status] || 'bg-gray-100 text-gray-800';
+        }
+
+        function getPriorityColor(priority) {
+            const colors = {
+                'critical': 'bg-red-100 text-red-800',
+                'high': 'bg-orange-100 text-orange-800',
+                'medium': 'bg-yellow-100 text-yellow-800',
+                'low': 'bg-green-100 text-green-800'
+            };
+            return colors[priority] || 'bg-gray-100 text-gray-800';
+        }
+
+        function getRiskColor(impact) {
+            const colors = {
+                'high': 'border-red-500',
+                'medium': 'border-yellow-500', 
+                'low': 'border-green-500'
+            };
+            return colors[impact] || 'border-gray-500';
+        }
+
+        function getTaskIcon(status) {
+            const icons = {
+                'completed': 'fa-check-circle',
+                'in_progress': 'fa-clock',
+                'pending': 'fa-circle',
+                'cancelled': 'fa-times-circle'
+            };
+            return icons[status] || 'fa-circle';
+        }
+
+        function getTaskIconColor(status) {
+            const colors = {
+                'completed': 'text-green-600',
+                'in_progress': 'text-blue-600',
+                'pending': 'text-gray-400',
+                'cancelled': 'text-red-600'
+            };
+            return colors[status] || 'text-gray-400';
+        }
+
+        function refreshData() {
+            loadProjectData();
+        }
+
+        // Initialize dashboard
+        window.addEventListener('DOMContentLoaded', loadProjectData);
+    </script>
+</body>
+</html> 

@@ -1,0 +1,186 @@
+{
+  "project": {
+    "name": "GoAI-Backend",
+    "version": "1.0.0",
+    "startDate": "2025-01-01",
+    "targetDate": "2025-06-01",
+    "currentPhase": "Foundation",
+    "overallProgress": 28
+  },
+  "milestones": [
+    {
+      "id": "foundation",
+      "name": "Foundation & Infrastructure",
+      "description": "Базовая инфраструктура и подключение к БД",
+      "phase": "current",
+      "progress": 90,
+      "priority": "critical",
+      "estimatedDays": 7,
+      "status": "in_progress",
+      "tasks": [
+        {
+          "id": "db_connection",
+          "name": "Подключение к PostgreSQL",
+          "status": "in_progress",
+          "progress": 60,
+          "description": "Настроить подключение к БД через Drizzle ORM"
+        },
+        {
+          "id": "db_schema",
+          "name": "Создание схемы БД",
+          "status": "completed",
+          "progress": 100,
+          "description": "Создать таблицы products и настроить ENUM типы"
+        },
+        {
+          "id": "basic_ui",
+          "name": "Базовый UI с Catalyst",
+          "status": "completed",
+          "progress": 100,
+          "description": "Навбар, таблицы, карточки продуктов"
+        },
+        {
+          "id": "api_endpoints",
+          "name": "API endpoints",
+          "status": "completed",
+          "progress": 100,
+          "description": "/api/products и /api/seed"
+        }
+      ],
+      "blockers": [
+        "Таблица products не создана в PostgreSQL"
+      ],
+      "acceptance_criteria": [
+        "БД подключена и работает",
+        "Все таблицы созданы",
+        "API endpoints отвечают",
+        "UI отображает данные из БД"
+      ]
+    },
+    {
+      "id": "core_functionality",
+      "name": "Core Business Logic",
+      "description": "Основной функционал CRUD операций",
+      "phase": "next",
+      "progress": 0,
+      "priority": "critical",
+      "estimatedDays": 14,
+      "status": "planned",
+      "tasks": [
+        {
+          "id": "crud_operations",
+          "name": "CRUD операции для продуктов",
+          "status": "pending",
+          "progress": 0,
+          "description": "Create, Update, Delete операции"
+        },
+        {
+          "id": "data_validation",
+          "name": "Валидация данных",
+          "status": "pending",
+          "progress": 0,
+          "description": "Zod схемы для валидации"
+        },
+        {
+          "id": "search_filter",
+          "name": "Поиск и фильтрация",
+          "status": "pending",
+          "progress": 0,
+          "description": "Функционал поиска по продуктам"
+        }
+      ],
+      "dependencies": [
+        "foundation"
+      ],
+      "acceptance_criteria": [
+        "Полный CRUD для продуктов работает",
+        "Валидация данных на клиенте и сервере",
+        "Поиск работает корректно"
+      ]
+    },
+    {
+      "id": "authentication",
+      "name": "Authentication & Authorization",
+      "description": "Система аутентификации пользователей",
+      "phase": "planned",
+      "progress": 20,
+      "priority": "high",
+      "estimatedDays": 10,
+      "status": "in_progress",
+      "tasks": [
+        {
+          "id": "nextauth_setup",
+          "name": "Настройка NextAuth.js",
+          "status": "in_progress",
+          "progress": 40,
+          "description": "OAuth провайдеры (Google, GitHub)"
+        },
+        {
+          "id": "user_management",
+          "name": "Управление пользователями",
+          "status": "pending",
+          "progress": 0,
+          "description": "User model и профили"
+        }
+      ],
+      "dependencies": [
+        "core_functionality"
+      ]
+    },
+    {
+      "id": "production_ready",
+      "name": "Production Deployment",
+      "description": "Подготовка к продакшену и деплой",
+      "phase": "planned",
+      "progress": 0,
+      "priority": "high",
+      "estimatedDays": 10,
+      "status": "planned",
+      "tasks": [
+        {
+          "id": "env_config",
+          "name": "Production environment",
+          "status": "pending",
+          "progress": 0,
+          "description": "Настройка production переменных"
+        },
+        {
+          "id": "ci_cd_setup",
+          "name": "CI/CD пайплайн",
+          "status": "pending",
+          "progress": 0,
+          "description": "GitHub Actions для автодеплоя"
+        }
+      ],
+      "dependencies": [
+        "authentication"
+      ]
+    }
+  ],
+  "metrics": {
+    "completion_percentage": 28,
+    "estimated_completion_date": "2025-03-23",
+    "days_remaining": 82
+  },
+  "risks": [
+    {
+      "id": "db_issues",
+      "description": "Проблемы с настройкой PostgreSQL",
+      "probability": "medium",
+      "impact": "high",
+      "mitigation": "Создать SQL скрипты для быстрого восстановления"
+    },
+    {
+      "id": "scope_creep",
+      "description": "Расширение scope без планирования",
+      "probability": "high",
+      "impact": "high",
+      "mitigation": "Strict milestone review и approval process"
+    }
+  ],
+  "next_actions": [
+    "Таблица products не создана в PostgreSQL",
+    "Начать: Управление пользователями",
+    "Завершить настройку базовой инфраструктуры"
+  ]
+}

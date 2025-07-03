@@ -3,7 +3,15 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "analyze": "npx tsx scripts/analyze-progress.ts",
+    "dashboard": "pnpm dev",
+    "progress": "pnpm analyze && echo '\\n🚀 Dashboard: http://localhost:3000/project-dashboard' && pnpm dev",
+    "project:status": "npx tsx scripts/analyze-progress.ts",
+    "project:dashboard": "echo '🚀 Opening dashboard at http://localhost:3000/project-dashboard' && pnpm dev",
+    "project:init": "npx tsx scripts/init-project-management.ts"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.18",
@@ -47,5 +55,8 @@
     "singleQuote": true,
     "tabWidth": 2,
     "trailingComma": "none"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.3"
   }
 }
