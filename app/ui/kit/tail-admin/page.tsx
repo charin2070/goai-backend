@@ -3,7 +3,6 @@ import SignInForm from "@/components/tail-admin/auth/SignInForm";
 import SignUpForm from "@/components/tail-admin/auth/SignUpForm";
 import Calendar from "@/components/tail-admin/calendar/Calendar";
 import BasicTableOne from "@/components/tail-admin/tables/BasicTableOne";
-import EcommerceMetrics from "@/components/tail-admin/ecommerce/EcommerceMetrics";
 
 export default function TailAdminPage() {
   return (
@@ -29,10 +28,7 @@ export default function TailAdminPage() {
         <Calendar />
       </section>
 
-      <section className="mb-12 p-4 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">E-commerce Metrics</h2>
-        <EcommerceMetrics />
-      </section>
+
 
       <section className="mb-12 p-4 border rounded-lg">
         <h2 className="text-2xl font-semibold mb-4">Basic Table</h2>

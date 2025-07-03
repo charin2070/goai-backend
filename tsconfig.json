@@ -19,10 +19,11 @@
       "@/data": ["data.ts"],
       "@/components/*": ["src/components/*"],
       "@/lib/*": ["lib/*"],
-      "@/app/*": ["app/*"]
+      "@/app/*": ["app/*"],
+      "@/hooks/*": ["src/hooks/*"]
     },
     "plugins": [
-      {
+      { 
         "name": "next"
       }
     ]

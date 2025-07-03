@@ -1,9 +1,9 @@
 "use client";
-import Checkbox from "@/components/form/input/Checkbox";
-import Input from "@/components/form/input/InputField";
-import Label from "@/components/form/Label";
-import Button from "@/components/ui/button/Button";
-import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
+import Checkbox from "@/components/tail-admin/form/input/Checkbox";
+import Input from "@/components/tail-admin/form/input/InputField";
+import Label from "@/components/tail-admin/form/Label";
+import Button from "@/components/tail-admin/ui/button/Button";
+import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/components/icons";
 import Link from "next/link";
 import React, { useState } from "react";
 

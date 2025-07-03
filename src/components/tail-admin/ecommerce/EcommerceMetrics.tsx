@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import Badge from "../ui/badge/Badge";
-import { ArrowDownIcon, ArrowUpIcon, BoxIconLine, GroupIcon } from "@/icons";
+import { Badge } from "@/components/badge";
+import { ArrowDownIcon, ArrowUpIcon, BoxIconLine, GroupIcon } from "@/components/icons";
 
-export const EcommerceMetrics = () => {
+export default function EcommerceMetrics() {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
       {/* <!-- Metric Item Start --> */}
@@ -21,7 +21,7 @@ export const EcommerceMetrics = () => {
               3,782
             </h4>
           </div>
-          <Badge color="success">
+          <Badge color="green">
             <ArrowUpIcon />
             11.01%
           </Badge>
@@ -44,8 +44,8 @@ export const EcommerceMetrics = () => {
             </h4>
           </div>
 
-          <Badge color="error">
-            <ArrowDownIcon className="text-error-500" />
+          <Badge color="red">
+            <ArrowDownIcon className="text-red-500" />
             9.05%
           </Badge>
         </div>
