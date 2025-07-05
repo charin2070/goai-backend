@@ -1,5 +1,11 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "npm.packageManager": "pnpm"
+  "npm.packageManager": "pnpm",
+  "piny.project_settings": {
+    "open-pages": [
+      "pinyfakepage.html"
+    ]
+  },
+  "svg.preview.background": "custom"
 }

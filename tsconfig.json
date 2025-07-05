@@ -20,7 +20,9 @@
       "@/components/*": ["src/components/*"],
       "@/lib/*": ["lib/*"],
       "@/app/*": ["app/*"],
-      "@/hooks/*": ["src/hooks/*"]
+      "@/hooks/*": ["src/hooks/*"],
+      "@/public/*": ["public/*"],
+      "@/images/*": ["public/images/*"]
     },
     "plugins": [
       { 

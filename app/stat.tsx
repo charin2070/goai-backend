@@ -18,4 +18,4 @@ export function Stat({ title, value, change }: StatProps) {
       </div>
     </div>
   )
-} 
+}

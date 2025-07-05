@@ -67,7 +67,7 @@ todo_write(merge=true, todos=[...])
 ```bash
 # Запускай dashboard для визуализации
 pnpm progress
-# Откроется http://localhost:3001/project-dashboard
+# Откроется http://localhost:3001/project-management
 ```
 
 **Как использовать dashboard:**

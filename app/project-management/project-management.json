@@ -1,0 +1,383 @@
+{
+  "project": {
+    "name": "GoAI-Backend",
+    "description": "Backend-модуль для экосистемы GoAI - платформы автоматической консолидации мультимодальных данных",
+    "version": "1.0.0-dev",
+    "lastUpdated": "2024-12-21",
+    "overallProgress": 45
+  },
+  "milestones": [
+    {
+      "id": "foundation",
+      "name": "Foundation & Infrastructure",
+      "progress": 100,
+      "status": "completed",
+      "priority": "high",
+      "dueDate": "2024-12-25",
+      "tasks": [
+        {
+          "id": "project_structure",
+          "name": "Базовая структура проекта",
+          "status": "completed",
+          "progress": 100,
+          "description": "Темплейт admin-dashboard адаптирован"
+        },
+        {
+          "id": "database_connection",
+          "name": "Подключение к PostgreSQL",
+          "status": "completed",
+          "progress": 100,
+          "description": "Исправлен драйвер (Neon → postgres)"
+        },
+        {
+          "id": "database_schema",
+          "name": "Схема базы данных",
+          "status": "completed",
+          "progress": 100,
+          "description": "Таблица products создана с ENUM типом status и тестовыми данными"
+        },
+        {
+          "id": "ui_components",
+          "name": "UI компоненты",
+          "status": "completed",
+          "progress": 100,
+          "description": "Навбар, таблица, карточки с Catalyst UI"
+        },
+        {
+          "id": "api_endpoints",
+          "name": "API endpoints",
+          "status": "completed",
+          "progress": 100,
+          "description": "/api/products и /api/seed"
+        },
+        {
+          "id": "documentation",
+          "name": "Система документации",
+          "status": "completed",
+          "progress": 100,
+          "description": "Папка /documentation/ с индексным файлом"
+        },
+        {
+          "id": "project_management",
+          "name": "Система управления проектом",
+          "status": "completed",
+          "progress": 100,
+          "description": "Dashboard и roadmap система"
+        }
+      ]
+    },
+    {
+      "id": "core_business",
+      "name": "Core Business Logic",
+      "progress": 0,
+      "status": "not_started",
+      "priority": "high",
+      "dueDate": "2025-01-15",
+      "tasks": [
+        {
+          "id": "crud_operations",
+          "name": "CRUD операции",
+          "status": "not_started",
+          "progress": 0,
+          "description": "Создание, обновление, удаление данных"
+        },
+        {
+          "id": "data_validation",
+          "name": "Валидация данных",
+          "status": "not_started",
+          "progress": 0,
+          "description": "Zod схемы для валидации"
+        },
+        {
+          "id": "search_filters",
+          "name": "Поиск и фильтрация",
+          "status": "not_started",
+          "progress": 0,
+          "description": "Функционал поиска и фильтрации данных"
+        },
+        {
+          "id": "storage_service",
+          "name": "StorageService интеграция",
+          "status": "not_started",
+          "progress": 0,
+          "description": "Интеграция с GoAI-Storage модулем"
+        }
+      ]
+    },
+    {
+      "id": "auth_system",
+      "name": "Authentication & Authorization",
+      "progress": 20,
+      "status": "planning",
+      "priority": "medium",
+      "dueDate": "2025-02-01",
+      "tasks": [
+        {
+          "id": "nextauth_setup",
+          "name": "NextAuth.js настройка",
+          "status": "in_progress",
+          "progress": 60,
+          "description": "Настроен, но переменные окружения не заполнены"
+        },
+        {
+          "id": "oauth_providers",
+          "name": "OAuth провайдеры",
+          "status": "not_started",
+          "progress": 0,
+          "description": "Google, GitHub OAuth настройка"
+        },
+        {
+          "id": "user_management",
+          "name": "Управление пользователями",
+          "status": "not_started",
+          "progress": 0,
+          "description": "Роли, права доступа"
+        }
+      ]
+    },
+    {
+      "id": "production",
+      "name": "Production Deployment",
+      "progress": 0,
+      "status": "not_started",
+      "priority": "low",
+      "dueDate": "2025-03-01",
+      "tasks": [
+        {
+          "id": "deployment_config",
+          "name": "Конфигурация развертывания",
+          "status": "not_started",
+          "progress": 0,
+          "description": "Docker, CI/CD настройка"
+        },
+        {
+          "id": "performance_optimization",
+          "name": "Оптимизация производительности",
+          "status": "not_started",
+          "progress": 0,
+          "description": "Bundle size, caching, CDN"
+        },
+        {
+          "id": "monitoring",
+          "name": "Мониторинг и логирование",
+          "status": "not_started",
+          "progress": 0,
+          "description": "Error tracking, metrics"
+        }
+      ]
+    }
+  ],
+  "criticalTasks": [
+    {
+      "id": "crud_create_operations",
+      "name": "Реализовать CREATE операции",
+      "priority": "critical",
+      "description": "Добавить POST endpoints для создания новых продуктов",
+      "estimatedTime": "2-3 часа",
+      "blockedBy": [],
+      "blocking": ["crud_update_operations", "data_validation"]
+    },
+    {
+      "id": "crud_update_operations", 
+      "name": "Реализовать UPDATE операции",
+      "priority": "critical",
+      "description": "Добавить PUT/PATCH endpoints для обновления продуктов",
+      "estimatedTime": "2-3 часа",
+      "blockedBy": ["crud_create_operations"],
+      "blocking": ["crud_delete_operations"]
+    },
+    {
+      "id": "crud_delete_operations",
+      "name": "Реализовать DELETE операции", 
+      "priority": "high",
+      "description": "Добавить DELETE endpoints для удаления продуктов",
+      "estimatedTime": "1-2 часа",
+      "blockedBy": ["crud_update_operations"],
+      "blocking": []
+    }
+  ],
+  "technicalDebt": [
+    {
+      "id": "mobile_adaptation",
+      "name": "Мобильная адаптация",
+      "severity": "medium",
+      "description": "Требует тестирования на мобильных устройствах",
+      "estimatedEffort": "2 дня"
+    },
+    {
+      "id": "error_handling",
+      "name": "Улучшение обработки ошибок",
+      "severity": "low",
+      "description": "Более детальная обработка edge cases",
+      "estimatedEffort": "1 день"
+    }
+  ],
+  "codeQuality": {
+    "coverage": 65,
+    "maintainability": 85,
+    "performance": 75,
+    "security": 70,
+    "documentation": 90
+  },
+  "recommendations": [
+    {
+      "category": "immediate",
+      "priority": "critical",
+      "title": "Завершить настройку базы данных",
+      "description": "Создать таблицу products в PostgreSQL и протестировать загрузку данных",
+      "actions": [
+        "Выполнить SQL скрипт для создания таблицы",
+        "Протестировать кнопку 'Load from DB'",
+        "Запустить seed данных"
+      ]
+    },
+    {
+      "category": "short_term",
+      "priority": "high",
+      "title": "Реализовать CRUD операции",
+      "description": "Начать разработку основной бизнес-логики",
+      "actions": [
+        "Создать API endpoints для CREATE, UPDATE, DELETE",
+        "Добавить формы для работы с данными",
+        "Реализовать валидацию с Zod"
+      ]
+    },
+    {
+      "category": "medium_term",
+      "priority": "medium",
+      "title": "Завершить настройку авторизации",
+      "description": "Настроить OAuth провайдеры и систему ролей",
+      "actions": [
+        "Заполнить переменные окружения для NextAuth",
+        "Настроить Google OAuth",
+        "Создать систему ролей пользователей"
+      ]
+    },
+    {
+      "category": "long_term",
+      "priority": "low",
+      "title": "Подготовка к продакшену",
+      "description": "Оптимизация и конфигурация для развертывания",
+      "actions": [
+        "Настроить Docker контейнеры",
+        "Создать CI/CD pipeline",
+        "Добавить мониторинг и логирование"
+      ]
+    }
+  ],
+  "nextSteps": [
+    {
+      "step": 1,
+      "title": "Создать таблицу products в PostgreSQL",
+      "description": "Выполнить SQL скрипт из README.md",
+      "estimatedTime": "30 минут",
+      "priority": "critical"
+    },
+    {
+      "step": 2,
+      "title": "Протестировать загрузку данных",
+      "description": "Проверить работу кнопки 'Load from DB'",
+      "estimatedTime": "15 минут",
+      "priority": "critical"
+    },
+    {
+      "step": 3,
+      "title": "Заполнить БД тестовыми данными",
+      "description": "Запустить /api/seed endpoint",
+      "estimatedTime": "15 минут",
+      "priority": "critical"
+    },
+    {
+      "step": 4,
+      "title": "Начать разработку CRUD операций",
+      "description": "Создать API endpoints для CREATE, UPDATE, DELETE",
+      "estimatedTime": "2-3 дня",
+      "priority": "high"
+    }
+  ],
+  "analytics": {
+    "totalTasks": 23,
+    "completedTasks": 7,
+    "inProgressTasks": 2,
+    "blockedTasks": 1,
+    "averageTaskCompletion": 3.2,
+    "estimatedProjectCompletion": "2025-03-15",
+    "riskFactors": [
+      "Блокировка из-за незавершенной настройки БД",
+      "Отсутствие опыта с некоторыми технологиями",
+      "Необходимость изучения новых концепций"
+    ]
+  },
+  "aiAssistant": {
+    "lastAnalysis": "2024-12-21T15:30:00Z",
+    "sessionContext": {
+      "currentFocus": "Завершена настройка инфраструктуры, переход к основной бизнес-логике",
+      "recentProgress": [
+        "✅ Успешно настроена база данных PostgreSQL",
+        "✅ Создана таблица products с ENUM типом status", 
+        "✅ Заполнена БД тестовыми данными",
+        "✅ Проверена работа API endpoints /api/products и /api/seed",
+        "✅ Milestone Foundation & Infrastructure завершен на 100%"
+      ],
+      "knownIssues": [
+        "Отсутствуют CREATE, UPDATE, DELETE операции в API",
+        "Нет валидации данных с Zod схемами",
+        "Переменные окружения NextAuth не заполнены",
+        "Требуется тестирование мобильной версии"
+      ],
+      "developerSkillLevel": "Изучает Next.js/React, успешно освоил PostgreSQL и Drizzle ORM"
+    },
+    "nextSessionPlan": {
+      "priority": "critical",
+      "immediateActions": [
+        "Выполнить SQL скрипт для создания таблицы products",
+        "Протестировать загрузку данных через кнопку 'Load from DB'",
+        "Запустить seed данных для заполнения БД"
+      ],
+      "subsequentActions": [
+        "Начать разработку CRUD операций для продуктов",
+        "Создать формы для добавления/редактирования продуктов",
+        "Реализовать валидацию данных с Zod"
+      ],
+      "learningObjectives": [
+        "Изучить работу с PostgreSQL в Next.js",
+        "Освоить Drizzle ORM для миграций",
+        "Понять паттерны Server Actions"
+      ]
+    },
+    "codebaseInsights": {
+      "strengths": [
+        "Хорошая структура файлов и папок",
+        "Использование современных технологий",
+        "Подробная документация",
+        "Catalyst UI Kit для красивого интерфейса"
+      ],
+      "weaknesses": [
+        "Незавершенная настройка базы данных",
+        "Отсутствие тестов",
+        "Неполная реализация CRUD операций"
+      ],
+      "technicalDebtAreas": [
+        "Обработка ошибок в компонентах",
+        "Типизация API responses",
+        "Мобильная адаптация интерфейса"
+      ]
+    },
+    "instructions": {
+      "analysisFrequency": "Обновлять после каждой значимой сессии разработки",
+      "focusAreas": [
+        "Проверять прогресс по критическим задачам",
+        "Обновлять статусы milestone'ов",
+        "Отслеживать блокеры и зависимости",
+        "Корректировать оценки времени"
+      ],
+      "reportingFormat": "Использовать структурированный формат из ai-prompt.md",
+      "updateTriggers": [
+        "Завершение задач",
+        "Обнаружение новых проблем",
+        "Изменение приоритетов",
+        "Достижение milestone'ов"
+      ]
+    }
+  }
+}

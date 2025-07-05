@@ -39,9 +39,12 @@ import {
   HomeIcon,
   QuestionMarkCircleIcon,
   SparklesIcon,
+  PresentationChartLineIcon,
   Square2StackIcon,
   TicketIcon,
+  CircleStackIcon,
 } from '@heroicons/react/20/solid'
+import { UserIcon } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 function AccountDropdownMenu({ anchor }: { anchor: 'top start' | 'bottom end' }) {
@@ -88,7 +91,7 @@ export function ApplicationLayout({
           <NavbarSection>
             <Dropdown>
               <DropdownButton as={NavbarItem}>
-                <Avatar src="/users/erica.jpg" square />
+                <Avatar src="/images/user.svg" square />
               </DropdownButton>
               <AccountDropdownMenu anchor="bottom end" />
             </Dropdown>
@@ -100,8 +103,8 @@ export function ApplicationLayout({
           <SidebarHeader>
             <Dropdown>
               <DropdownButton as={SidebarItem}>
-                <Avatar src="/teams/catalyst.svg" />
-                <SidebarLabel>Catalyst</SidebarLabel>
+                <Avatar src="/images/logo.svg" />
+                <SidebarLabel><strong>GoAI</strong></SidebarLabel>
                 <ChevronDownIcon />
               </DropdownButton>
               <DropdownMenu className="min-w-80 lg:min-w-64" anchor="bottom start">
@@ -128,61 +131,40 @@ export function ApplicationLayout({
           </SidebarHeader>
 
           <SidebarBody>
+          <SidebarSection>
+              <SidebarHeading>Services</SidebarHeading>
+              <SidebarItem href="/services/storage">
+                <CircleStackIcon />
+                <SidebarLabel>Storage</SidebarLabel>
+              </SidebarItem>
+            </SidebarSection>
+          
             <SidebarSection>
-              <SidebarItem href="/" current={pathname === '/'}>
-                <HomeIcon />
-                <SidebarLabel>Home</SidebarLabel>
+              <SidebarHeading>Project</SidebarHeading>
+              <SidebarItem href="/project-management">
+                <PresentationChartLineIcon />
+                <SidebarLabel>Management</SidebarLabel>
               </SidebarItem>
-              <SidebarItem href="/events" current={pathname.startsWith('/events')}>
-                <Square2StackIcon />
-                <SidebarLabel>Events</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href="/orders" current={pathname.startsWith('/orders')}>
-                <TicketIcon />
-                <SidebarLabel>Orders</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href="/settings" current={pathname.startsWith('/settings')}>
+              <SidebarItem href="/project-dashboard">
                 <Cog6ToothIcon />
                 <SidebarLabel>Settings</SidebarLabel>
               </SidebarItem>
             </SidebarSection>
+            </SidebarBody>
 
-            <SidebarSection className="max-lg:hidden">
-              <SidebarHeading>Upcoming Events</SidebarHeading>
-              {events.map((event) => (
-                <SidebarItem key={event.id} href={event.url}>
-                  {event.name}
-                </SidebarItem>
-              ))}
-            </SidebarSection>
 
             <SidebarSpacer />
-
-            <SidebarSection>
-              <SidebarItem href="#">
-                <QuestionMarkCircleIcon />
-                <SidebarLabel>Support</SidebarLabel>
-              </SidebarItem>
-              <SidebarItem href="#">
-                <SparklesIcon />
-                <SidebarLabel>Changelog</SidebarLabel>
-              </SidebarItem>
-            </SidebarSection>
-          </SidebarBody>
-
           <SidebarFooter className="max-lg:hidden">
             <Dropdown>
               <DropdownButton as={SidebarItem}>
-                <span className="flex min-w-0 items-center gap-3">
-                  <Avatar src="/users/erica.jpg" className="size-10" square alt="" />
+              <UserIcon className="size-6" />
+                  
                   <span className="min-w-0">
-                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">Erica</span>
+                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">Developer</span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
-                      erica@example.com
+                      charin2070@gmail.com
                     </span>
-                  </span>
-                </span>
-                <ChevronUpIcon />
+                  </span>     
               </DropdownButton>
               <AccountDropdownMenu anchor="top start" />
             </Dropdown>

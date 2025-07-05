@@ -9,7 +9,11 @@ import { ChevronLeftIcon } from '@heroicons/react/24/solid'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+type PageProps = {
+  params: { id: string }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   let event = await getEvent(params.id)
 
   return {
@@ -17,7 +21,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-export default async function Event({ params }: { params: { id: string } }) {
+export default async function Event({ params }: PageProps) {
   let event = await getEvent(params.id)
   let orders = await getEventOrders(params.id)
 

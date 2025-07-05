@@ -8,7 +8,9 @@ import {
   CheckCircleIcon,
   HandRaisedIcon,
   RocketLaunchIcon,
+  UserIcon,
   SparklesIcon,
+  Cog6ToothIcon,
   SunIcon,
   UserGroupIcon,
 } from '@heroicons/react/20/solid'
@@ -45,6 +47,11 @@ const values = [
     name: 'Always learning.',
     description: 'Iure sed ab. Aperiam optio placeat dolor facere. Officiis pariatur eveniet atque et dolor.',
     icon: AcademicCapIcon,
+  },
+  {
+      name: 'Settings',
+      description: 'Set up global GoAI settings',
+    icon: Cog6ToothIcon,
   },
   {
     name: 'Share everything you know.',
