@@ -1,5 +1,6 @@
 import { IStorageProvider } from "./storage/storage-provider";
-import { PostgresProvider } from "./storage/postgres-provider";
+// PostgresProvider будет импортирован динамически
+// import { PostgresProvider } from "./storage/postgres-provider";
 import { IndexedDbProvider } from "./storage/indexeddb-provider";
 import { LocalStorageProvider } from "./storage/localstorage-provider";
 
@@ -125,25 +126,26 @@ export class StorageService implements IStorageProvider {
  * Автоматически выбирает наилучший доступный провайдер в зависимости от среды.
  */
 const createStorageService = (): StorageService => {
-    let provider: IStorageProvider;
-
-    // Выполняется на сервере
-    if (typeof window === 'undefined') {
-        provider = new PostgresProvider(process.env.POSTGRES_URL || '');
-    } 
-    // Выполняется в браузере
-    else {
+    if (typeof window !== 'undefined') {
+        // --- Логика для БРАУЗЕРА ---
         // Предпочитаем IndexedDB, если он доступен
         if (window.indexedDB) {
-            provider = new IndexedDbProvider('goai-app-db');
-        } 
+            const provider = new IndexedDbProvider('goai-app-db');
+            return new StorageService(provider);
+        }
         // В крайнем случае используем localStorage
         else {
-            provider = new LocalStorageProvider();
+            const provider = new LocalStorageProvider();
+            return new StorageService(provider);
         }
+    } else {
+        // --- Логика для СЕРВЕРА (Node.js) ---
+        // Динамический импорт провайдера, который работает только на сервере.
+        // Это предотвращает попадание серверного кода в клиентский бандл.
+        const { PostgresProvider } = require("./storage/postgres-provider");
+        const provider = new PostgresProvider(process.env.POSTGRES_URL || '');
+        return new StorageService(provider);
     }
-    
-    return new StorageService(provider);
 };
 
 /**

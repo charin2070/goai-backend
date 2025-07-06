@@ -1,4 +1,6 @@
-import { Pool } from 'pg';
+import 'server-only';
+
+import { Pool, QueryResult } from 'pg';
 import { IStorageProvider } from './storage-provider';
 
 /**

@@ -21,6 +21,7 @@
       "@/lib/*": ["lib/*"],
       "@/app/*": ["app/*"],
       "@/hooks/*": ["src/hooks/*"],
+      "@/services/*": ["src/services/*"],
       "@/public/*": ["public/*"],
       "@/images/*": ["public/images/*"]
     },
