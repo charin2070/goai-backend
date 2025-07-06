@@ -12,5 +12,8 @@ export default {
         search: ''
       }
     ]
-  }
+  },
+  experimental: {
+    instrumentationHook: true,
+  },
 };
