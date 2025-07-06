@@ -8,7 +8,6 @@ import { Select } from '@/components/select'
 import { Text } from '@/components/text'
 import { Textarea } from '@/components/textarea'
 import type { Metadata } from 'next'
-import { Address } from './address'
 
 export const metadata: Metadata = {
   title: 'Settings',
@@ -56,16 +55,6 @@ export default function Settings() {
             <Label>Show email on public profile</Label>
           </CheckboxField>
         </div>
-      </section>
-
-      <Divider className="my-10" soft />
-
-      <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
-        <div className="space-y-1">
-          <Subheading>Address</Subheading>
-          <Text>This is where your organization is registered.</Text>
-        </div>
-        <Address />
       </section>
 
       <Divider className="my-10" soft />

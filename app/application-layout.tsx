@@ -26,7 +26,6 @@ import {
   SidebarSpacer,
 } from '@/components/sidebar'
 import { SidebarLayout } from '@/components/sidebar-layout'
-import { getEvents } from '@/data'
 import {
   ArrowRightStartOnRectangleIcon,
   ChevronDownIcon,
@@ -72,13 +71,7 @@ function AccountDropdownMenu({ anchor }: { anchor: 'top start' | 'bottom end' })
   )
 }
 
-export function ApplicationLayout({
-  events,
-  children,
-}: {
-  events: Awaited<ReturnType<typeof getEvents>>
-  children: React.ReactNode
-}) {
+export function ApplicationLayout({ children }: { children: React.ReactNode }) {
   let pathname = usePathname()
 
   return (
