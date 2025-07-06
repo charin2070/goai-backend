@@ -665,7 +665,7 @@ className="max-w-7xl"  // Стандартный Tailwind класс
 
 **❌ Неправильно:**
 ```typescript
-className="dark:bg-gray-900 dark:bg-white/[0.03]"  // Конфликт!
+ dark:bg-white/[0.03]"  // Конфликт!
 ```
 
 **✅ Правильно:**

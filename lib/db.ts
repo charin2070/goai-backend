@@ -88,3 +88,31 @@ export async function getProducts(
 export async function deleteProductById(id: number) {
   await db.delete(products).where(eq(products.id, id));
 }
+
+// Схема для сущности "Issue" (Задача)
+
+export const issueStatusEnum = pgEnum('issue_status', [
+  'todo',
+  'in_progress',
+  'done',
+  'archived'
+]);
+
+export const issues = pgTable('issues', {
+  id: serial('id').primaryKey(),
+  title: text('title').notNull(),
+  description: text('description'),
+  status: issueStatusEnum('status').notNull().default('todo'),
+  source: text('source'),
+  // Поле createdAt будет автоматически установлено базой данных в момент создания записи.
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  // Поле updatedAt будет автоматически обновляться специальным триггером в базе данных при каждом изменении записи.
+  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow()
+});
+
+export type SelectIssue = typeof issues.$inferSelect;
+export type InsertIssue = typeof issues.$inferInsert;
+
+export const insertIssueSchema = createInsertSchema(issues);
+
+// TODO: На следующих этапах здесь будут реализованы функции для работы с задачами (CRUD).
