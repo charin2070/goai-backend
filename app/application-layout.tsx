@@ -106,18 +106,9 @@ export function ApplicationLayout({ children }: { children: React.ReactNode }) {
                   <DropdownLabel>Settings</DropdownLabel>
                 </DropdownItem>
                 <DropdownDivider />
-                <DropdownItem href="#">
-                  <Avatar slot="icon" src="/teams/catalyst.svg" />
-                  <DropdownLabel>Catalyst</DropdownLabel>
-                </DropdownItem>
-                <DropdownItem href="#">
-                  <Avatar slot="icon" initials="BE" className="bg-purple-500 text-white" />
-                  <DropdownLabel>Big Events</DropdownLabel>
-                </DropdownItem>
-                <DropdownDivider />
-                <DropdownItem href="#">
-                  <PlusIcon />
-                  <DropdownLabel>New team&hellip;</DropdownLabel>
+                <DropdownItem href="/services/logs">
+                  <Avatar slot="icon" src="/images/logs.svg" />
+                  <DropdownLabel>Logs</DropdownLabel>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>

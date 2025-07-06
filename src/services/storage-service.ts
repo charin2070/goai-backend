@@ -4,23 +4,10 @@ import { IStorageProvider } from "./storage/storage-provider";
 import { IndexedDbProvider } from "./storage/indexeddb-provider";
 import { LocalStorageProvider } from "./storage/localstorage-provider";
 
-// Node.js-специфичные импорты для файловых операций.
-// Используем require для условной загрузки, чтобы избежать ошибок в браузере.
-let fs: typeof import('fs');
-let path: typeof import('path');
-if (typeof window === 'undefined') {
-    fs = require('fs');
-    path = require('path');
-}
-
-
 /**
  * StorageService - это класс-фасад, который предоставляет единый API
  * для взаимодействия с различными хранилищами данных.
  * Он делегирует все операции выбранному "провайдеру" (стратегии).
- *
- * Также он берет на себя специфичную для окружения логику,
- * такую как работа с файловой системой на сервере.
  */
 export class StorageService implements IStorageProvider {
     private provider: IStorageProvider;
@@ -65,11 +52,11 @@ export class StorageService implements IStorageProvider {
         return this.provider.importStore(storeName, data);
     }
 
-    // --- Методы для работы с файлами ---
+    // --- Методы для работы с файлами (только для браузера) ---
 
     /**
      * Экспортирует данные из хранилища в файл.
-     * В браузере инициирует скачивание. На сервере сохраняет на диск.
+     * В браузере инициирует скачивание.
      * @param storeName Имя хранилища.
      * @param fileName Имя файла (e.g., 'users.json').
      */
@@ -88,76 +75,38 @@ export class StorageService implements IStorageProvider {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         } else {
-            // --- Логика для сервера (Node.js) ---
-            // Предполагаем, что сохраняем в директорию 'exports' в корне проекта.
-            const exportDir = path.resolve(process.cwd(), 'exports');
-            if (!fs.existsSync(exportDir)) {
-                fs.mkdirSync(exportDir);
-            }
-            const filePath = path.join(exportDir, fileName);
-            fs.writeFileSync(filePath, jsonString, 'utf-8');
-            console.log(`Данные успешно экспортированы в ${filePath}`);
+            console.warn('Экспорт файлов на сервере доступен только через server-storage-service.ts');
         }
-    }
-
-    /**
-     * Импортирует данные из файла. Работает только на сервере.
-     * @param storeName Имя хранилища.
-     * @param filePath Путь к файлу.
-     */
-    async importFromFile(storeName: string, filePath: string): Promise<void> {
-         if (typeof window !== 'undefined') {
-            console.warn('Импорт из файла поддерживается только на стороне сервера.');
-            return;
-        }
-        
-        const absolutePath = path.resolve(process.cwd(), filePath);
-        if (!fs.existsSync(absolutePath)) {
-            throw new Error(`Файл не найден: ${absolutePath}`);
-        }
-        const jsonString = fs.readFileSync(absolutePath, 'utf-8');
-        await this.importStore(storeName, jsonString);
-        console.log(`Данные из ${filePath} успешно импортированы в ${storeName}.`);
     }
 }
 
-/**
- * Фабрика для создания экземпляра StorageService.
- * Автоматически выбирает наилучший доступный провайдер в зависимости от среды.
- */
-const createStorageService = (): StorageService => {
+let storageServicePromise: Promise<StorageService> | null = null;
+
+const createStorageService = async (): Promise<StorageService> => {
     if (typeof window !== 'undefined') {
         // --- Логика для БРАУЗЕРА ---
-        // Предпочитаем IndexedDB, если он доступен
+        let provider: IStorageProvider;
         if (window.indexedDB) {
-            const provider = new IndexedDbProvider('goai-app-db');
-            return new StorageService(provider);
+            provider = new IndexedDbProvider('goai-app-db');
+        } else {
+            provider = new LocalStorageProvider();
         }
-        // В крайнем случае используем localStorage
-        else {
-            const provider = new LocalStorageProvider();
-            return new StorageService(provider);
-        }
-    } else {
-        // --- Логика для СЕРВЕРА (Node.js) ---
-        // Динамический импорт провайдера, который работает только на сервере.
-        // Это предотвращает попадание серверного кода в клиентский бандл.
-        const { PostgresProvider } = require("./storage/postgres-provider");
-        const provider = new PostgresProvider(process.env.POSTGRES_URL || '');
         return new StorageService(provider);
+    } else {
+        // --- Логика для СЕРВЕРА ---
+        // Используем отдельный серверный модуль
+        const { createServerStorageService } = await import("./server-storage-service.js");
+        return createServerStorageService();
     }
 };
 
 /**
- * Глобальный, готовый к использованию экземпляр сервиса.
- * Его необходимо инициализировать один раз при старте приложения.
- * Например, в главном файле вашего приложения (layout.tsx или _app.tsx).
- *
- * Пример использования:
- * import { storageService } from '@/services/storage-service';
- *
- * useEffect(() => {
- *   storageService.initialize();
- * }, []);
+ * Асинхронно получает единственный экземпляр StorageService.
+ * Создает его при первом вызове, затем возвращает существующий.
  */
-export const storageService = createStorageService(); 
+export const getStorageService = (): Promise<StorageService> => {
+    if (!storageServicePromise) {
+        storageServicePromise = createStorageService();
+    }
+    return storageServicePromise;
+}; 
