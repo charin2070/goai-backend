@@ -2,6 +2,7 @@
 
 import './globals.css'
 import { Avatar } from '@/components/avatar'
+import { Button } from '@/components/button'
 import {
   Dropdown,
   DropdownButton,
@@ -10,6 +11,8 @@ import {
   DropdownLabel,
   DropdownMenu,
 } from '@/components/dropdown'
+import { Heading, Subheading } from '@/components/heading'
+import { Link } from '@/components/link'
 import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from '@/components/navbar'
 import {
   Sidebar,
@@ -33,17 +36,14 @@ import {
   PlusIcon,
   ShieldCheckIcon,
   UserCircleIcon,
-} from '@heroicons/react/16/solid'
+} from '@heroicons/react/20/solid'
 import {
   Cog6ToothIcon,
+  PresentationChartLineIcon,
   HomeIcon,
   QuestionMarkCircleIcon,
-  SparklesIcon,
-  PresentationChartLineIcon,
-  Square2StackIcon,
-  TicketIcon,
   CircleStackIcon,
-} from '@heroicons/react/20/solid'
+} from '@heroicons/react/24/outline'
 import { UserIcon } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
