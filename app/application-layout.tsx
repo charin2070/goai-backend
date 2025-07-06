@@ -42,6 +42,7 @@ import {
   HomeIcon,
   QuestionMarkCircleIcon,
   CircleStackIcon,
+  CpuChipIcon,
 } from '@heroicons/react/24/outline'
 import { UserIcon } from 'lucide-react'
 import { usePathname } from 'next/navigation'
@@ -117,6 +118,10 @@ export function ApplicationLayout({ children }: { children: React.ReactNode }) {
           <SidebarBody>
           <SidebarSection>
               <SidebarHeading>Services</SidebarHeading>
+              <SidebarItem href="/services">
+                <CpuChipIcon />
+                <SidebarLabel>Service Monitor</SidebarLabel>
+              </SidebarItem>
               <SidebarItem href="/services/storage">
                 <CircleStackIcon />
                 <SidebarLabel>Storage</SidebarLabel>

@@ -1,5 +1,3 @@
-'use server';
-
 import { StorageService } from './storage-service';
 import { IStorageProvider } from './storage/storage-provider';
 

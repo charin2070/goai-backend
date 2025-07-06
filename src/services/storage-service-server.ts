@@ -1,5 +1,3 @@
-'use server';
-
 import { IStorageProvider } from "./storage/storage-provider";
 
 /**
