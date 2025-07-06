@@ -44,6 +44,7 @@ GoAI-AI - модуль для интеграции с AI-сервисами (Ope
 - **Icons:** [Lucide React 0.400.0](https://lucide.dev) + [Heroicons 2.2.0](https://heroicons.com)
 - **Package Manager:** [pnpm 10.12.4](https://pnpm.io) ✅
 
+
 ### 2.2 Дополнительные инструменты
 - **Build Tool:** [Turbopack](https://turbo.build/pack) (Next.js встроенный)
 - **Auth:** [NextAuth.js 5.0.0-beta.25](https://authjs.dev) (настроен, но не активен)
