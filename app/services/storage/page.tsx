@@ -73,7 +73,7 @@ const activityItems = [
   // More items...
 ]
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
@@ -333,7 +333,7 @@ export default function Example() {
                 <li key={deployment.id} className="relative flex items-center space-x-4 px-4 py-4 sm:px-6 lg:px-8">
                   <div className="min-w-0 flex-auto">
                     <div className="flex items-center gap-x-3">
-                      <div className={classNames(statuses[deployment.status], 'flex-none rounded-full p-1')}>
+                      <div className={classNames(statuses[deployment.status as keyof typeof statuses], 'flex-none rounded-full p-1')}>
                         <div className="size-2 rounded-full bg-current" />
                       </div>
                       <h2 className="min-w-0 text-sm/6 font-semibold text-white">
@@ -355,7 +355,7 @@ export default function Example() {
                   </div>
                   <div
                     className={classNames(
-                      environments[deployment.environment],
+                      environments[deployment.environment as keyof typeof environments],
                       'flex-none rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset',
                     )}
                   >

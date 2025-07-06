@@ -133,31 +133,31 @@ export default function ProjectDashboard() {
 
   const getStatusColor = (status: string) => {
     const colors = {
-      'completed': 'bg-green-50 text-green-700 ring-green-200',
-      'in_progress': 'bg-blue-50 text-blue-700 ring-blue-200',
-      'not_started': 'bg-gray-50 text-gray-700 ring-gray-200',
-      'planning': 'bg-purple-50 text-purple-700 ring-purple-200',
-      'near_completion': 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+      'completed': 'bg-success-50 text-success-700 ring-success-200 dark:bg-success-900/20 dark:text-success-400 dark:ring-success-800',
+      'in_progress': 'bg-brand-50 text-brand-700 ring-brand-200 dark:bg-brand-900/20 dark:text-brand-400 dark:ring-brand-800',
+      'not_started': 'bg-gray-50 text-gray-700 ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700',
+      'planning': 'bg-theme-purple-50 text-theme-purple-700 ring-theme-purple-200 dark:bg-theme-purple-900/20 dark:text-theme-purple-400 dark:ring-theme-purple-800',
+      'near_completion': 'bg-success-50 text-success-700 ring-success-200 dark:bg-success-900/20 dark:text-success-400 dark:ring-success-800'
     };
-    return colors[status as keyof typeof colors] || 'bg-gray-50 text-gray-700 ring-gray-200';
+    return colors[status as keyof typeof colors] || 'bg-gray-50 text-gray-700 ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700';
   };
 
   const getPriorityColor = (priority: string) => {
     const colors = {
-      'critical': 'bg-red-50 text-red-700 ring-red-200',
-      'high': 'bg-orange-50 text-orange-700 ring-orange-200', 
-      'medium': 'bg-yellow-50 text-yellow-700 ring-yellow-200',
-      'low': 'bg-green-50 text-green-700 ring-green-200'
+      'critical': 'bg-error-50 text-error-700 ring-error-200 dark:bg-error-900/20 dark:text-error-400 dark:ring-error-800',
+      'high': 'bg-orange-50 text-orange-700 ring-orange-200 dark:bg-orange-900/20 dark:text-orange-400 dark:ring-orange-800', 
+      'medium': 'bg-warning-50 text-warning-700 ring-warning-200 dark:bg-warning-900/20 dark:text-warning-400 dark:ring-warning-800',
+      'low': 'bg-success-50 text-success-700 ring-success-200 dark:bg-success-900/20 dark:text-success-400 dark:ring-success-800'
     };
-    return colors[priority as keyof typeof colors] || 'bg-gray-50 text-gray-700 ring-gray-200';
+    return colors[priority as keyof typeof colors] || 'bg-gray-50 text-gray-700 ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700';
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Загрузка dashboard...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Загрузка dashboard...</p>
         </div>
       </div>
     );
@@ -165,15 +165,15 @@ export default function ProjectDashboard() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center max-w-md mx-auto">
-          <ExclamationTriangleIcon className="mx-auto h-12 w-12 text-red-500" />
-          <h3 className="mt-2 text-sm font-semibold text-gray-900">Ошибка загрузки</h3>
-          <p className="mt-1 text-sm text-gray-500">{error}</p>
+          <ExclamationTriangleIcon className="mx-auto h-12 w-12 text-error-500" />
+          <h3 className="mt-2 text-sm font-semibold text-gray-900 dark:text-white">Ошибка загрузки</h3>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{error}</p>
           <div className="mt-6">
             <button
               onClick={loadData}
-              className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+              className="inline-flex items-center rounded-lg bg-brand-600 px-3 py-2 text-sm font-semibold text-white shadow-theme-sm hover:bg-brand-500"
             >
               Попробовать снова
             </button>
@@ -186,31 +186,78 @@ export default function ProjectDashboard() {
   if (!data) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 justify-between items-center">
-            <div className="flex items-center">
-              <h1 className="text-xl font-semibold text-gray-900">{data.project.name}</h1>
-              <span className="ml-3 inline-flex items-center rounded-md bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-700/10">
-                {data.project.version}
-              </span>
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{data.project.name}</h1>
+          <span className="ml-3 inline-flex items-center rounded-lg bg-brand-50 px-2 py-1 text-xs font-medium text-brand-700 ring-1 ring-inset ring-brand-700/10 dark:bg-brand-900/20 dark:text-brand-400 dark:ring-brand-800">
+            {data.project.version}
+          </span>
+        </div>
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            Обновлено: {new Date(data.project.lastUpdated).toLocaleString('ru')}
+          </span>
+          <button 
+            onClick={loadData}
+            className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white shadow-theme-sm hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+          >
+            🔄 Обновить
+          </button>
+        </div>
+      </div>
+
+      {/* Project Overview Cards */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="overflow-hidden rounded-xl bg-gradient-to-r from-brand-500 to-theme-purple-500 p-6 text-white shadow-theme-sm">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <ChartBarIcon className="h-8 w-8" />
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-500">
-                Обновлено: {new Date(data.project.lastUpdated).toLocaleDateString('ru')}
-              </span>
-              <button
-                onClick={loadData}
-                className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
-              >
-                Обновить
-              </button>
+            <div className="ml-4">
+              <p className="text-sm font-medium opacity-90">Общий прогресс</p>
+              <p className="text-2xl font-bold">{data.project.overallProgress}%</p>
             </div>
           </div>
         </div>
-      </header>
+        
+        <div className="overflow-hidden rounded-xl bg-white p-6 shadow-theme-sm dark:bg-gray-900 dark:border dark:border-gray-800">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <CheckCircleIcon className="h-8 w-8 text-success-600" />
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Завершено задач</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{data.analytics.completedTasks}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="overflow-hidden rounded-xl bg-white p-6 shadow-theme-sm dark:bg-gray-900 dark:border dark:border-gray-800">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <ClockIcon className="h-8 w-8 text-warning-600" />
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">В работе</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{data.analytics.inProgressTasks}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="overflow-hidden rounded-xl bg-white p-6 shadow-theme-sm dark:bg-gray-900 dark:border dark:border-gray-800">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <ExclamationTriangleIcon className="h-8 w-8 text-error-600" />
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Заблокировано</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{data.analytics.blockedTasks}</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Project Overview */}

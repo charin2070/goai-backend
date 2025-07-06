@@ -9,9 +9,12 @@ import {
   CheckCircleIcon,
   ClockIcon,
   ArrowPathIcon,
+  CpuChipIcon,
+  CloudIcon,
+  LinkIcon,
 } from '@heroicons/react/24/outline';
-import { ChevronRightIcon } from '@heroicons/react/20/solid';
-import ServiceCard from './service-card';
+import { ChevronRightIcon, PlayIcon, StopIcon } from '@heroicons/react/20/solid';
+import Badge from '@/components/tail-admin/ui/badge/Badge';
 import { ServiceInfo } from '../api/services/route';
 
 interface ServicesResponse {
@@ -25,20 +28,6 @@ interface ServicesResponse {
   };
   lastUpdated: string;
 }
-
-const statuses = {
-  running: 'text-green-400 bg-green-400/10',
-  stopped: 'text-gray-400 bg-gray-400/10',
-  error: 'text-rose-400 bg-rose-400/10',
-  unknown: 'text-yellow-400 bg-yellow-400/10',
-};
-
-const healthStatuses = {
-  healthy: 'text-green-400 bg-green-400/10 ring-green-400/20',
-  unhealthy: 'text-rose-400 bg-rose-400/10 ring-rose-400/20',
-  degraded: 'text-yellow-400 bg-yellow-400/10 ring-yellow-400/20',
-  unknown: 'text-gray-400 bg-gray-400/10 ring-gray-400/20',
-};
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -104,10 +93,10 @@ export default function ServicesPage() {
 
   if (loading && !data) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <ArrowPathIcon className="h-12 w-12 text-indigo-400 animate-spin mx-auto" />
-          <p className="mt-4 text-gray-300">Загрузка информации о сервисах...</p>
+          <ArrowPathIcon className="h-12 w-12 text-brand-500 animate-spin mx-auto" />
+          <p className="mt-4 text-gray-500 dark:text-gray-400">Загрузка информации о сервисах...</p>
         </div>
       </div>
     );
@@ -115,14 +104,14 @@ export default function ServicesPage() {
 
   if (error && !data) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <ExclamationTriangleIcon className="h-12 w-12 text-rose-400 mx-auto" />
-          <h3 className="mt-4 text-lg font-semibold text-white">Ошибка загрузки</h3>
-          <p className="mt-2 text-gray-400">{error}</p>
+          <ExclamationTriangleIcon className="h-12 w-12 text-error-500 mx-auto" />
+          <h3 className="mt-4 text-lg font-semibold text-gray-800 dark:text-white/90">Ошибка загрузки</h3>
+          <p className="mt-2 text-gray-500 dark:text-gray-400">{error}</p>
           <button 
             onClick={loadServices}
-            className="mt-4 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="mt-4 rounded-xl bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white shadow-theme-sm hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
           >
             Попробовать снова
           </button>
@@ -152,8 +141,12 @@ export default function ServicesPage() {
         return ChartBarSquareIcon;
       case 'settings':
         return Cog6ToothIcon;
+      case 'api':
+        return CloudIcon;
+      case 'provider':
+        return LinkIcon;
       default:
-        return ServerIcon;
+        return CpuChipIcon;
     }
   };
 
@@ -168,190 +161,242 @@ export default function ServicesPage() {
     return typeNames[type] || type;
   };
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'running':
+        return 'bg-success-500';
+      case 'error':
+        return 'bg-error-500';
+      case 'stopped':
+        return 'bg-gray-400';
+      default:
+        return 'bg-warning-500';
+    }
+  };
+
+  const getHealthText = (health: string) => {
+    switch (health) {
+      case 'healthy':
+        return 'Здоров';
+      case 'unhealthy':
+        return 'Неисправен';
+      case 'degraded':
+        return 'Ухудшен';
+      default:
+        return 'Неизвестно';
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-900">
-      {/* Header */}
-      <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-white/5 bg-gray-900 px-4 shadow-sm sm:px-6 lg:px-8">
-        <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-          <div className="flex items-center gap-x-4">
-            <ServerIcon className="h-8 w-8 text-indigo-400" />
-            <h1 className="text-base font-semibold text-white">Мониторинг сервисов</h1>
-          </div>
-          <div className="flex flex-1 justify-end items-center gap-x-4">
-            <div className="flex items-center gap-x-2 text-sm text-gray-400">
-              <ClockIcon className="h-4 w-4" />
-              <span>Обновлено: {lastRefresh.toLocaleTimeString('ru')}</span>
-            </div>
-            <button
-              onClick={loadServices}
-              disabled={loading}
-              className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
-            >
-              <ArrowPathIcon className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-            </button>
-          </div>
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Service Monitor</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Мониторинг состояния сервисов и компонентов системы
+          </p>
+        </div>
+        <div className="flex items-center space-x-4">
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            Обновлено: {lastRefresh.toLocaleTimeString('ru')}
+          </span>
+          <button 
+            onClick={loadServices}
+            disabled={loading}
+            className="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white shadow-theme-sm hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 disabled:opacity-50"
+          >
+            <ArrowPathIcon className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            Обновить
+          </button>
         </div>
       </div>
 
-      <main className="px-4 py-8 sm:px-6 lg:px-8">
-        {/* Summary Statistics */}
-        {summary && (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-            <div className="relative overflow-hidden rounded-lg bg-white/5 px-4 py-5 shadow ring-1 ring-white/10 sm:px-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <ChartBarSquareIcon className="h-6 w-6 text-gray-400" />
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-gray-400 truncate">Всего сервисов</dt>
-                    <dd className="text-lg font-medium text-white">{summary.total}</dd>
-                  </dl>
-                </div>
-              </div>
+      {/* Summary Cards */}
+      {summary && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-6">
+          {/* <!-- Metric Item Start --> */}
+          <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+            <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+              <CpuChipIcon className="text-gray-800 size-6 dark:text-white/90" />
             </div>
 
-            <div className="relative overflow-hidden rounded-lg bg-white/5 px-4 py-5 shadow ring-1 ring-white/10 sm:px-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <div className="flex-none rounded-full bg-green-400/10 p-1">
-                    <div className="h-2 w-2 rounded-full bg-green-400" />
-                  </div>
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-gray-400 truncate">Запущено</dt>
-                    <dd className="text-lg font-medium text-white">{summary.running}</dd>
-                  </dl>
-                </div>
+            <div className="flex items-end justify-between mt-5">
+              <div>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Всего сервисов
+                </span>
+                <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+                  {summary.total}
+                </h4>
               </div>
-            </div>
-
-            <div className="relative overflow-hidden rounded-lg bg-white/5 px-4 py-5 shadow ring-1 ring-white/10 sm:px-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <CheckCircleIcon className="h-6 w-6 text-green-400" />
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-gray-400 truncate">Здоровы</dt>
-                    <dd className="text-lg font-medium text-white">{summary.healthy}</dd>
-                  </dl>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative overflow-hidden rounded-lg bg-white/5 px-4 py-5 shadow ring-1 ring-white/10 sm:px-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <ExclamationTriangleIcon className="h-6 w-6 text-rose-400" />
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-gray-400 truncate">Ошибки</dt>
-                    <dd className="text-lg font-medium text-white">{summary.errors}</dd>
-                  </dl>
-                </div>
-              </div>
+              <Badge color="info">
+                <ServerIcon className="size-3" />
+                {summary.total > 0 ? 'Активно' : 'Нет данных'}
+              </Badge>
             </div>
           </div>
-        )}
+          {/* <!-- Metric Item End --> */}
 
-        {/* Services List */}
-        <div className="space-y-8">
-          {Object.entries(servicesByType).map(([type, typeServices]) => {
-            const TypeIcon = getTypeIcon(type);
-            return (
-              <div key={type}>
-                <div className="flex items-center gap-x-3 mb-4">
-                  <TypeIcon className="h-6 w-6 text-gray-400" />
-                  <h2 className="text-lg font-semibold text-white">{getTypeDisplayName(type)}</h2>
-                  <span className="inline-flex items-center rounded-md bg-gray-400/10 px-2 py-1 text-xs font-medium text-gray-400">
+          {/* <!-- Metric Item Start --> */}
+          <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+            <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+              <CheckCircleIcon className="text-gray-800 size-6 dark:text-white/90" />
+            </div>
+
+            <div className="flex items-end justify-between mt-5">
+              <div>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Запущено
+                </span>
+                <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+                  {summary.running}
+                </h4>
+              </div>
+              <Badge color="success">
+                <PlayIcon className="size-3" />
+                {Math.round((summary.running / summary.total) * 100)}%
+              </Badge>
+            </div>
+          </div>
+          {/* <!-- Metric Item End --> */}
+
+          {/* <!-- Metric Item Start --> */}
+          <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+            <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+              <CheckCircleIcon className="text-gray-800 size-6 dark:text-white/90" />
+            </div>
+
+            <div className="flex items-end justify-between mt-5">
+              <div>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Здоровых
+                </span>
+                <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+                  {summary.healthy}
+                </h4>
+              </div>
+              <Badge color="success">
+                <CheckCircleIcon className="size-3" />
+                {Math.round((summary.healthy / summary.total) * 100)}%
+              </Badge>
+            </div>
+          </div>
+          {/* <!-- Metric Item End --> */}
+
+          {/* <!-- Metric Item Start --> */}
+          <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+            <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+              <ExclamationTriangleIcon className="text-gray-800 size-6 dark:text-white/90" />
+            </div>
+
+            <div className="flex items-end justify-between mt-5">
+              <div>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Ошибок
+                </span>
+                <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+                  {summary.errors}
+                </h4>
+              </div>
+              <Badge color={summary.errors > 0 ? "error" : "success"}>
+                {summary.errors > 0 ? (
+                  <ExclamationTriangleIcon className="size-3" />
+                ) : (
+                  <CheckCircleIcon className="size-3" />
+                )}
+                {summary.errors > 0 ? 'Проблемы' : 'Стабильно'}
+              </Badge>
+            </div>
+          </div>
+          {/* <!-- Metric Item End --> */}
+        </div>
+      )}
+
+      {/* Services by Type */}
+      <div className="space-y-6">
+        {Object.entries(servicesByType).map(([type, typeServices]) => {
+          const Icon = getTypeIcon(type);
+          
+          return (
+            <div key={type} className="overflow-hidden rounded-xl bg-white shadow-theme-sm dark:bg-gray-900 dark:border dark:border-gray-800">
+              <div className="border-b border-gray-200 dark:border-gray-800 px-6 py-4">
+                <div className="flex items-center">
+                  <Icon className="h-6 w-6 text-brand-600 mr-3" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    {getTypeDisplayName(type)}
+                  </h3>
+                  <span className="ml-2 inline-flex items-center rounded-full bg-brand-100 px-2.5 py-0.5 text-xs font-medium text-brand-800 dark:bg-brand-900/20 dark:text-brand-400">
                     {typeServices.length}
                   </span>
                 </div>
-                
-                <ul role="list" className="divide-y divide-white/5">
-                  {typeServices.map((service) => (
-                    <li key={service.id} className="relative flex items-center space-x-4 px-4 py-4 hover:bg-white/5 rounded-lg">
-                      <div className="min-w-0 flex-auto">
-                        <div className="flex items-center gap-x-3">
-                          <div className={classNames(statuses[service.status], 'flex-none rounded-full p-1')}>
-                            <div className="h-2 w-2 rounded-full bg-current" />
+              </div>
+              
+              <div className="divide-y divide-gray-200 dark:divide-gray-800">
+                {typeServices.map((service) => (
+                  <div key={service.id} className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center min-w-0 flex-1">
+                        <div className={`flex-shrink-0 h-3 w-3 rounded-full ${getStatusColor(service.status)}`} />
+                        <div className="ml-4 min-w-0 flex-1">
+                          <div className="flex items-center">
+                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                              {service.name}
+                            </p>
+                            <Badge 
+                              color={
+                                service.health === 'healthy' ? 'success' :
+                                service.health === 'unhealthy' ? 'error' :
+                                service.health === 'degraded' ? 'warning' : 'light'
+                              }
+                              size="sm"
+                            >
+                              {getHealthText(service.health)}
+                            </Badge>
                           </div>
-                          <h3 className="min-w-0 text-sm font-semibold text-white">
-                            <span className="truncate">{service.name}</span>
-                          </h3>
-                          <div className={classNames(
-                            healthStatuses[service.health],
-                            'flex-none rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset'
-                          )}>
-                            {service.health === 'healthy' && 'Здоров'}
-                            {service.health === 'unhealthy' && 'Неисправен'}
-                            {service.health === 'degraded' && 'Ухудшен'}
-                            {service.health === 'unknown' && 'Неизвестно'}
-                          </div>
-                        </div>
-                        <div className="mt-3 flex items-center gap-x-2.5 text-xs text-gray-400">
-                          <p className="truncate">{service.description}</p>
-                          <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 flex-none fill-gray-300">
-                            <circle cx={1} cy={1} r={1} />
-                          </svg>
-                          <p className="whitespace-nowrap">v{service.version}</p>
-                          {service.metrics && (
-                            <>
-                              <svg viewBox="0 0 2 2" className="h-0.5 w-0.5 flex-none fill-gray-300">
-                                <circle cx={1} cy={1} r={1} />
-                              </svg>
-                              <p className="whitespace-nowrap">
-                                {service.metrics.errorCount || 0} ошибок
-                              </p>
-                            </>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                            {service.description}
+                          </p>
+                          {service.lastHealthCheck && (
+                            <p className="text-xs text-gray-400 dark:text-gray-500">
+                              Последняя проверка: {new Date(service.lastHealthCheck).toLocaleString('ru')}
+                            </p>
                           )}
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-x-2">
-                        <button
-                          onClick={() => handleServiceManage(service.id, 'refresh')}
-                          className="rounded-md bg-white/10 px-2.5 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-white/20"
-                        >
-                          Обновить
-                        </button>
-                        
+                      <div className="flex items-center space-x-2 ml-4">
                         {service.status === 'running' ? (
                           <button
                             onClick={() => handleServiceManage(service.id, 'stop')}
-                            className="rounded-md bg-rose-600/20 px-2.5 py-1.5 text-xs font-semibold text-rose-400 shadow-sm hover:bg-rose-600/30"
+                            className="rounded-lg bg-error-500 p-2 text-white hover:bg-error-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-error-600"
                           >
-                            Остановить
+                            <StopIcon className="h-4 w-4" />
                           </button>
                         ) : (
                           <button
                             onClick={() => handleServiceManage(service.id, 'start')}
-                            className="rounded-md bg-green-600/20 px-2.5 py-1.5 text-xs font-semibold text-green-400 shadow-sm hover:bg-green-600/30"
+                            className="rounded-lg bg-success-500 p-2 text-white hover:bg-success-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-success-600"
                           >
-                            Запустить
+                            <PlayIcon className="h-4 w-4" />
                           </button>
                         )}
+                        
+                        <button
+                          onClick={() => handleServiceManage(service.id, 'refresh')}
+                          className="rounded-lg bg-brand-500 p-2 text-white hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+                        >
+                          <ArrowPathIcon className="h-4 w-4" />
+                        </button>
                       </div>
-                      
-                      <ChevronRightIcon className="h-5 w-5 flex-none text-gray-400" />
-                    </li>
-                  ))}
-                </ul>
+                    </div>
+                  </div>
+                ))}
               </div>
-            );
-          })}
-        </div>
-
-        {/* Auto-refresh notification */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500">
-            Автоматическое обновление каждые 30 секунд
-          </p>
-        </div>
-      </main>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
