@@ -35,12 +35,14 @@ export const Dropdown: React.FC<DropdownProps> = ({
 }, [onClose]);
 
 
-  if (!isOpen) return null;
-
   return (
     <div
       ref={dropdownRef}
-      className={`absolute z-40  right-0 mt-2  rounded-xl border border-gray-200 bg-white  shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark ${className}`}
+      className={`absolute z-40 right-0 mt-2 rounded-xl border border-gray-200 bg-white shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark transition-all duration-200 ease-out ${
+        isOpen
+          ? "scale-100 opacity-100"
+          : "pointer-events-none scale-95 opacity-0"
+      } ${className}`}
     >
       {children}
     </div>

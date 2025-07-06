@@ -6,7 +6,7 @@ import { Dropdown } from "@/components/tail-admin/ui/dropdown/Dropdown";
 import { DropdownItem } from "@/components/tail-admin/ui/dropdown/DropdownItem";
 
 export interface BaseCardProps {
-  title: string;
+  title?: ReactNode;
   description?: string;
   children: ReactNode;
   className?: string;
@@ -50,18 +50,22 @@ export default function BaseCard({
   const menuItems = dropdownItems.length > 0 ? dropdownItems : defaultDropdownItems;
 
   return (
-    <div className={`rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6 ${className}`}>
-      <div className="flex justify-between items-start">
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            {title}
-          </h3>
+    <div className={`rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6 transition-all duration-300 ease-in-out hover:shadow-theme-lg hover:-translate-y-1 ${className}`}>
+      {(title || showDropdown) && <div className="flex justify-between items-start">
+        {title && <div className="flex-1">
+          {typeof title === 'string' ? (
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
+              {title}
+            </h3>
+          ) : (
+            title
+          )}
           {description && (
             <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
               {description}
             </p>
           )}
-        </div>
+        </div>}
 
         {showDropdown && (
           <div className="relative inline-block ml-4">
@@ -100,7 +104,7 @@ export default function BaseCard({
             </Dropdown>
           </div>
         )}
-      </div>
+      </div>}
 
       <div className="mt-4">
         {children}
