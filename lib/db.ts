@@ -9,7 +9,9 @@ import {
   integer,
   timestamp,
   pgEnum,
-  serial
+  serial,
+  jsonb,
+  uniqueIndex
 } from 'drizzle-orm/pg-core';
 import { count, eq, ilike } from 'drizzle-orm';
 import { createInsertSchema } from 'drizzle-zod';
@@ -17,6 +19,20 @@ import { createInsertSchema } from 'drizzle-zod';
 const connectionString = process.env.POSTGRES_URL!;
 const client = postgres(connectionString);
 export const db = drizzle(client);
+
+export const settings = pgTable(
+  'settings',
+  {
+    id: serial('id').primaryKey(),
+    key: text('key').notNull(),
+    value: jsonb('value')
+  },
+  (settings) => {
+    return {
+      keyIndex: uniqueIndex('key_idx').on(settings.key)
+    };
+  }
+);
 
 export const statusEnum = pgEnum('status', ['active', 'inactive', 'archived']);
 
